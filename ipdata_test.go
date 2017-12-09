@@ -59,7 +59,7 @@ func TestLookupOK(t *testing.T) {
 	})
 
 	idc := NewClient(WithURL(server.URL))
-	r, err := idc.Lookup("foo")
+	r, err := idc.Lookup(WithIP("foo"))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -82,7 +82,7 @@ func TestLookupFail(t *testing.T) {
 	})
 
 	idc := NewClient(WithURL(server.URL))
-	_, err := idc.Lookup("127.0.0.1")
+	_, err := idc.Lookup(WithIP("127.0.0.1"))
 	if err == nil {
 		t.Fatal("Expected error, got nil")
 	}
@@ -106,4 +106,25 @@ func TestWithURL(t *testing.T) {
 	url := "http://localhost"
 	idc := NewClient(WithURL(url))
 	assertEqual(t, idc.url, url)
+}
+
+func TestLookupNoIP(t *testing.T) {
+	setUp()
+	defer tearDown()
+
+	mux.HandleFunc("/en", func(w http.ResponseWriter, r *http.Request) {
+		assertEqual(t, r.Method, "GET")
+		w.Header().Add("Content-Type", acceptContentType)
+		_, _ = w.Write([]byte(fakeResponse))
+	})
+
+	idc := NewClient(WithURL(server.URL))
+	r, err := idc.Lookup()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assertEqual(t, r.IP, "foo")
+	assertEqual(t, r.City, "bar")
+	assertEqual(t, r.Region, "baz")
 }

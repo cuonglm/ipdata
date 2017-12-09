@@ -19,6 +19,7 @@ var (
 	langFlag   string
 	ipFlag     string
 	apiKeyFlag string
+	helpFlag   bool
 )
 
 func init() {
@@ -26,6 +27,7 @@ func init() {
 	flag.StringVar(&serverFlag, "server", defaultServer, fmt.Sprintf("the ip data server, default to %s", defaultServer))
 	flag.StringVar(&langFlag, "lang", defaultLang, "the language to use")
 	flag.StringVar(&apiKeyFlag, "key", "", "the api key to use")
+	flag.BoolVar(&helpFlag, "help", false, "show usage message")
 }
 
 func usage() {
@@ -39,18 +41,17 @@ Usage: %s -ip ip [-lang lang] [-server url] [-key api_key]
 func main() {
 	flag.Parse()
 
-	if ipFlag == "" {
+	if helpFlag {
 		usage()
 		os.Exit(1)
 	}
-
 	c := ipdata.NewClient(
 		ipdata.WithAPIKey(apiKeyFlag),
 		ipdata.WithURL(serverFlag),
 		ipdata.WithLanguage(langFlag),
 	)
 
-	r, err := c.Lookup(ipFlag)
+	r, err := c.Lookup(ipdata.WithIP(ipFlag))
 	if err != nil {
 		fmt.Fprint(os.Stderr, err)
 		os.Exit(2)

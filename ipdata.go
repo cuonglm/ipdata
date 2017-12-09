@@ -43,6 +43,13 @@ func WithURL(url string) Option {
 	}
 }
 
+// WithIP return the ip to gather data when using Lookup
+func WithIP(ip string) func() string {
+	return func() string {
+		return ip
+	}
+}
+
 // ResponseData represents data response from ip data server
 type ResponseData struct {
 	IP             string  `json:"ip"`
@@ -81,9 +88,9 @@ func NewClient(options ...Option) *Client {
 	return i
 }
 
-// Lookup gathers information about given ip
-func (c *Client) Lookup(ip string) (*ResponseData, error) {
-	req, _ := http.NewRequest("GET", strings.Join([]string{c.url, ip, c.Language}, "/"), nil)
+// Lookup gathers information about given with ip func, only the first one is honored
+func (c *Client) Lookup(withIPs ...func() string) (*ResponseData, error) {
+	req, _ := http.NewRequest("GET", c.buildPath(withIPs...), nil)
 	req.Header.Add("Accept", acceptContentType)
 	req.Header.Add("user-agent", userAgent)
 	if c.APIKey != "" {
@@ -110,4 +117,14 @@ func (c *Client) Lookup(ip string) (*ResponseData, error) {
 	}
 
 	return r, nil
+}
+
+func (c *Client) buildPath(withIPs ...func() string) string {
+	if len(withIPs) > 0 {
+		if ip := withIPs[0](); ip != "" {
+			return strings.Join([]string{c.url, ip, c.Language}, "/")
+		}
+	}
+	return strings.Join([]string{c.url, c.Language}, "/")
+
 }
