@@ -40,7 +40,6 @@ func main() {
 	flag.Parse()
 
 	if ipFlag == "" {
-		fmt.Fprint(os.Stderr, "ip is required")
 		usage()
 		os.Exit(1)
 	}
