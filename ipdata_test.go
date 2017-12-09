@@ -48,7 +48,7 @@ const fakeResponse = `
 }
 `
 
-func TestLookup(t *testing.T) {
+func TestLookupOK(t *testing.T) {
 	setUp()
 	defer tearDown()
 
@@ -67,6 +67,27 @@ func TestLookup(t *testing.T) {
 	assertEqual(t, r.IP, "foo")
 	assertEqual(t, r.City, "bar")
 	assertEqual(t, r.Region, "baz")
+}
+
+func TestLookupFail(t *testing.T) {
+	setUp()
+	defer tearDown()
+
+	errMsg := "127.0.0.1 is a private IP address"
+	mux.HandleFunc("/127.0.0.1/en", func(w http.ResponseWriter, r *http.Request) {
+		assertEqual(t, r.Method, "GET")
+		w.Header().Add("Content-Type", acceptContentType)
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte(errMsg))
+	})
+
+	idc := NewClient(WithURL(server.URL))
+	_, err := idc.Lookup("127.0.0.1")
+	if err == nil {
+		t.Fatal("Expected error, got nil")
+	}
+
+	assertEqual(t, err.Error(), errMsg)
 }
 
 func TestWithAPIKey(t *testing.T) {

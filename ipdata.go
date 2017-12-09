@@ -2,6 +2,8 @@ package ipdata
 
 import (
 	"encoding/json"
+	"errors"
+	"io/ioutil"
 	"net/http"
 	"strings"
 )
@@ -96,6 +98,11 @@ func (c *Client) Lookup(ip string) (*ResponseData, error) {
 			resp.Body.Close()
 		}
 	}()
+
+	if resp.StatusCode != http.StatusOK {
+		errMsg, _ := ioutil.ReadAll(resp.Body)
+		return nil, errors.New(string(errMsg))
+	}
 
 	r := &ResponseData{}
 	if err := json.NewDecoder(resp.Body).Decode(r); err != nil {
