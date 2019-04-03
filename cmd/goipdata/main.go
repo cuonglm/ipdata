@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Gnouc/ipdata"
+	"github.com/cuonglm/ipdata"
 )
 
 const (

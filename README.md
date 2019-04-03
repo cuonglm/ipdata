@@ -1,13 +1,13 @@
 # ipdata - Go library for ipdata.co
 
-[![Build Status](https://travis-ci.org/Gnouc/ipdata.svg?branch=master)](https://travis-ci.org/Gnouc/ipdata)
-[![Go Report Card](https://goreportcard.com/badge/github.com/Gnouc/ipdata)](https://goreportcard.com/report/github.com/Gnouc/ipdata)
-[![GoDoc](https://godoc.org/github.com/Gnouc/ipdata?status.svg)](https://godoc.org/github.com/Gnouc/ipdata)
+[![Build Status](https://travis-ci.org/cuonglm/ipdata.svg?branch=master)](https://travis-ci.org/cuonglm/ipdata)
+[![Go Report Card](https://goreportcard.com/badge/github.com/cuonglm/ipdata)](https://goreportcard.com/report/github.com/cuonglm/ipdata)
+[![GoDoc](https://godoc.org/github.com/cuonglm/ipdata?status.svg)](https://godoc.org/github.com/cuonglm/ipdata)
 
 # Installation
 
 ```sh
-go get -u github.com/Gnouc/ipdata/cmd/goipdata
+go get -u github.com/cuonglm/ipdata/cmd/goipdata
 ```
 
 # Usage
@@ -41,4 +41,4 @@ Cuong Manh Le <cuong.manhle.vn@gmail.com>
 
 # License
 
-See [LICENSE](https://github.com/Gnouc/ipdata/blob/master/LICENSE)
+See [LICENSE](https://github.com/cuonglm/ipdata/blob/master/LICENSE)
